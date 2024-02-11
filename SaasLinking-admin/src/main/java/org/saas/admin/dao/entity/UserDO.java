@@ -3,8 +3,6 @@ package org.saas.admin.dao.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @description t_user
  * @author elysium-w
@@ -12,7 +10,7 @@ import java.util.Date;
  */
 @Data
 @TableName("t_user")
-public class UserDao {
+public class UserDO {
 
 
     /**
@@ -50,20 +48,4 @@ public class UserDao {
      */
     private Long deletionTime;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
-
-    /**
-     * 删除标识 0：未删除 1：已删除
-     */
-    private Integer delFlag;
-
-    public UserDao() {}
 }

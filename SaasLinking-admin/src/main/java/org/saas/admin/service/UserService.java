@@ -1,10 +1,10 @@
 package org.saas.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.saas.admin.dao.entity.UserDao;
+import org.saas.admin.dao.entity.UserDO;
 import org.saas.admin.dto.resp.UserRespDTO;
 
-public interface UserService extends IService<UserDao> {
+public interface UserService extends IService<UserDO> {
     /**
      * 根据用户名查询用户信息
      *

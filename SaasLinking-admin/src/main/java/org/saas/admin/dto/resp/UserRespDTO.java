@@ -1,5 +1,11 @@
 package org.saas.admin.dto.resp;
 
+import lombok.Data;
+
+/**
+ * 
+ */
+@Data
 public class UserRespDTO {
     /**
      * id
