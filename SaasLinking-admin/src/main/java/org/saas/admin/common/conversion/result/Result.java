@@ -1,4 +1,4 @@
-package org.saas.admin.common.conversion;
+package org.saas.admin.common.conversion.result;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

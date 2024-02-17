@@ -1,7 +1,8 @@
 package org.saas.admin.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.saas.admin.common.conversion.Result;
+import org.saas.admin.common.conversion.result.Result;
+import org.saas.admin.common.enums.UserErrorCode;
 import org.saas.admin.dto.resp.UserRespDTO;
 import org.saas.admin.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ public class UserController {
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username")String username){
         UserRespDTO result=userService.getUserByUsername(username);
         if (result==null){
-            return new Result<UserRespDTO>().setCode("-1").setMessage("用户不存在");
+            return new Result<UserRespDTO>().setCode(UserErrorCode.USER_NULL.code()).setMessage(UserErrorCode.USER_NULL.message());
         }else {
             return new Result<UserRespDTO>().setCode("0").setData(result);
         }
