@@ -2,6 +2,7 @@ package org.saas.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.saas.admin.common.conversion.result.Result;
+import org.saas.admin.common.conversion.result.Results;
 import org.saas.admin.common.enums.UserErrorCode;
 import org.saas.admin.dto.resp.UserRespDTO;
 import org.saas.admin.service.UserService;
@@ -19,7 +20,7 @@ public class UserController {
         if (result==null){
             return new Result<UserRespDTO>().setCode(UserErrorCode.USER_NULL.code()).setMessage(UserErrorCode.USER_NULL.message());
         }else {
-            return new Result<UserRespDTO>().setCode("0").setData(result);
+            return Results.success(result);
         }
     }
 }
