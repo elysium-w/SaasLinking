@@ -1,6 +1,10 @@
 package org.saas.admin.dto.resp;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import org.saas.admin.common.serialize.IdCardDesensitizationSerializer;
+import org.saas.admin.common.serialize.PhoneDesensitizationSerializer;
+import org.saas.admin.common.serialize.RealNameDesensitizationSerializer;
 
 /**
  * 
@@ -10,6 +14,7 @@ public class UserRespDTO {
     /**
      * id
      */
+   @JsonSerialize(using = IdCardDesensitizationSerializer.class)
     private Long id;
 
     /**
@@ -20,11 +25,13 @@ public class UserRespDTO {
     /**
      * 真实姓名
      */
+    @JsonSerialize(using = RealNameDesensitizationSerializer.class)
     private String realName;
 
     /**
      * 手机号
      */
+    @JsonSerialize(using = PhoneDesensitizationSerializer.class)
     private String phone;
 
     /**

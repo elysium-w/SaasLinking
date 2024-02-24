@@ -50,6 +50,11 @@ public final class Results {
     /**
      * 通过 errorCode、errorMessage 构建失败响应
      */
+    public static Result<Void> failure(String errorCode,String errorMassage){
+        return new Result<Void>()
+                .setCode(errorCode)
+                .setMessage(errorCode);
+    }
     public static Result<Void> failure(IErrorCode errorCode){
         return new Result<Void>()
                 .setCode(errorCode.code())
