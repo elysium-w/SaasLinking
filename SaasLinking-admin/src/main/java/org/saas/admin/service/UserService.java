@@ -12,4 +12,5 @@ public interface UserService extends IService<UserDO> {
      * @return 用户返回实体
      */
     UserRespDTO getUserByUsername(String username);
+    Boolean hashUsername(String username);
 }

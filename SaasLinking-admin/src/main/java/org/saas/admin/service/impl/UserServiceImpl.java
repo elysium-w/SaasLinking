@@ -1,5 +1,6 @@
 package org.saas.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,5 +26,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             return result;
         }
         return null;
+    }
+
+    @Override
+    public Boolean hashUsername(String username) {
+        LambdaQueryWrapper<UserDO> wrapper = Wrappers.lambdaQuery(UserDO.class)
+                .eq(UserDO::getUsername,username);
+        UserDO userDO = baseMapper.selectOne(wrapper);
+        return userDO == null;
     }
 }
