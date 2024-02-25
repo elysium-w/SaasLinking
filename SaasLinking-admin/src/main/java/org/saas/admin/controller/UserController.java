@@ -6,13 +6,11 @@ import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.common.conversion.result.Results;
 import org.saas.admin.common.enums.UserErrorCode;
 import org.saas.admin.dao.entity.UserDO;
+import org.saas.admin.dto.res.UserRegisterReqDTO;
 import org.saas.admin.dto.resp.UserActuralRespDTO;
 import org.saas.admin.dto.resp.UserRespDTO;
 import org.saas.admin.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +26,15 @@ public class UserController {
     }
     @GetMapping("/api/link/v1/user/has-username")
     public Result<Boolean> hashUsername(@RequestParam("username")String username){
-        return Results.success(userService.hashUsername(username));
+        return Results.success(!userService.hashUsername(username));
+    }
+    /**
+     * 注册用户
+     */
+    @PostMapping("/api/link/v1/user/")
+    public Result<Void> userRegister(@RequestBody UserRegisterReqDTO requestParam){
+        userService.register(requestParam);
+        return Results.success();
     }
 
 }
