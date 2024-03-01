@@ -37,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         }
         return null;
     }
-
+//
     @Override
     public Boolean hashUsername(String username) {
        return !userRegisterCachePenetrationBloomFilter.contains(username);
