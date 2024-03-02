@@ -17,6 +17,8 @@ import org.saas.admin.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.DuplicateFormatFlagsException;
+
 import static org.saas.admin.common.constant.RedisCacheConstant.LOCK_USER_REGISTER_KEY;
 import static org.saas.admin.common.enums.UserErrorCode.*;
 
@@ -45,8 +47,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Override
     public void register(UserRegisterReqDTO requestParam) {
-        if (hashUsername(requestParam.getUsername())){
-            throw new ClientException(USERNAME_EXIST);
+        if (!hashUsername(requestParam.getUsername())){
+            throw new ClientException(USER_NAME_EXIST);
         }
         RLock lock = redissonClient.getLock(LOCK_USER_REGISTER_KEY + requestParam.getUsername());
         try{
@@ -56,8 +58,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                     throw new ClientException(USER_SAVE_ERROR);
                 }
             }
+
+        }catch (DuplicateFormatFlagsException duplicateFormatFlagsException){
             throw new ClientException(USER_EXIST);
-        }finally {
+        }
+        finally {
             lock.unlock();
         }
     }
