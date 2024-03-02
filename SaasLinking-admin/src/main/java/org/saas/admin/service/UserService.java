@@ -3,6 +3,7 @@ package org.saas.admin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.saas.admin.dao.entity.UserDO;
 import org.saas.admin.dto.res.UserRegisterReqDTO;
+import org.saas.admin.dto.res.UserUpdateReqDTO;
 import org.saas.admin.dto.resp.UserRespDTO;
 
 public interface UserService extends IService<UserDO> {
@@ -26,4 +27,8 @@ public interface UserService extends IService<UserDO> {
      * @param requestParam
      */
     void register(UserRegisterReqDTO requestParam);
+    /**
+     * 修改信息功能
+     */
+    void update(UserUpdateReqDTO requestParam);
 }

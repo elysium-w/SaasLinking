@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.common.conversion.result.Results;
 import org.saas.admin.dto.res.UserRegisterReqDTO;
+import org.saas.admin.dto.res.UserUpdateReqDTO;
 import org.saas.admin.dto.resp.UserActuralRespDTO;
 import org.saas.admin.dto.resp.UserRespDTO;
 import org.saas.admin.service.UserService;
@@ -32,6 +33,14 @@ public class UserController {
     @PostMapping("/api/link/v1/user/")
     public Result<Void> userRegister(@RequestBody UserRegisterReqDTO requestParam){
         userService.register(requestParam);
+        return Results.success();
+    }
+    /**
+     * 修改用户信息
+     */
+    @PutMapping("/api/link/v1/user/")
+    public Result<Void> userUpdate(@RequestBody UserUpdateReqDTO requestParam){
+        userService.update(requestParam);
         return Results.success();
     }
 

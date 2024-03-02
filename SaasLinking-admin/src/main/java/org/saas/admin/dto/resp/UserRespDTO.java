@@ -14,7 +14,6 @@ public class UserRespDTO {
     /**
      * id
      */
-   @JsonSerialize(using = IdCardDesensitizationSerializer.class)
     private Long id;
 
     /**
