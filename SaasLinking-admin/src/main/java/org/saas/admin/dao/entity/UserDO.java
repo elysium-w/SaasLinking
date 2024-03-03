@@ -3,7 +3,10 @@ package org.saas.admin.dao.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonBooleanFormatVisitor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.saas.admin.common.database.BaseDO;
 
 import java.util.Date;
 
@@ -14,7 +17,7 @@ import java.util.Date;
  */
 @Data
 @TableName("t_user")
-public class UserDO {
+public class UserDO extends BaseDO {
     /**
      * id
      */
@@ -43,16 +46,6 @@ public class UserDO {
      * 邮箱
      */
     private String mail;
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-    /**
-     * 修改时间
-     */
-    @TableField(fill = FieldFill.UPDATE)
-    private Date updateTime;
 
     /**
      * 注销时间戳

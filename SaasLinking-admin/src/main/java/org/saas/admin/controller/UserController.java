@@ -4,9 +4,11 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.common.conversion.result.Results;
+import org.saas.admin.dto.res.UserLoginReqDTO;
 import org.saas.admin.dto.res.UserRegisterReqDTO;
 import org.saas.admin.dto.res.UserUpdateReqDTO;
 import org.saas.admin.dto.resp.UserActuralRespDTO;
+import org.saas.admin.dto.resp.UserLoginRespDTO;
 import org.saas.admin.dto.resp.UserRespDTO;
 import org.saas.admin.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,18 @@ public class UserController {
     public Result<Void> userUpdate(@RequestBody UserUpdateReqDTO requestParam){
         userService.update(requestParam);
         return Results.success();
+    }
+
+    /**
+     *  用户登录信息
+     */
+    @PostMapping("/api/link/v1/user/login")
+    public Result<UserLoginRespDTO> userLogin(@RequestBody UserLoginReqDTO requestParam){
+        return Results.success(userService.login(requestParam));
+    }
+    @GetMapping("/api/link/v1/user/check-login")
+    public Result<Boolean> checkLogin (@RequestParam("token") String token){
+        return  Results.success(userService.checkLogin(token));
     }
 
 }
