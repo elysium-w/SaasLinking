@@ -25,6 +25,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.saas.admin.common.conversion.exception.ServiceException;
 import java.util.DuplicateFormatFlagsException;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -101,6 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                 .eq(UserDO::getPassword,requestParam.getPassword())
                 .eq(UserDO::getDelFlag,0);
         UserDO userDO = baseMapper.selectOne(queryWrapper);
+        Map<Object,Object> map =
         if (userDO == null){
             throw new ClientException(USER_NULL);
         }
