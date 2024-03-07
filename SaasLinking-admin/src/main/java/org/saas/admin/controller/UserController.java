@@ -2,6 +2,7 @@ package org.saas.admin.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Delete;
 import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.common.conversion.result.Results;
 import org.saas.admin.dto.res.UserLoginReqDTO;
@@ -54,8 +55,17 @@ public class UserController {
         return Results.success(userService.login(requestParam));
     }
     @GetMapping("/api/link/v1/user/check-login")
-    public Result<Boolean> checkLogin (@RequestParam("token") String token){
-        return  Results.success(userService.checkLogin(token));
+    public Result<Boolean> checkLogin (@RequestParam("username") String username, @RequestParam("token")String token){
+        return  Results.success(userService.checkLogin(username,token));
+    }
+
+    /**
+     * 用户退出登录
+     * @return
+     */
+    @DeleteMapping("/api/link/v1/user/logout")
+    public Result<Void> logout(){
+        return Results.success();
     }
 
 }

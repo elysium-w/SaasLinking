@@ -24,7 +24,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.saas.admin.common.conversion.exception.ServiceException;
+
+import javax.print.attribute.HashDocAttributeSet;
 import java.util.DuplicateFormatFlagsException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -102,18 +105,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                 .eq(UserDO::getPassword,requestParam.getPassword())
                 .eq(UserDO::getDelFlag,0);
         UserDO userDO = baseMapper.selectOne(queryWrapper);
-        Map<Object,Object> map =
+
         if (userDO == null){
             throw new ClientException(USER_NULL);
         }
+        Boolean hasLogin = stringRedisTemplate.hasKey("login_"+requestParam.getUsername());
+        if (hasLogin != null && hasLogin){
+            throw new ClientException("用户已登录");
+        }
         String uuid = UUID.randomUUID().toString();
-        stringRedisTemplate.opsForValue().set(uuid, JSON.toJSONString(userDO),30L, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForHash().put("login_"+requestParam.getUsername(),uuid,JSON.toJSONString(userDO));
+        stringRedisTemplate.expire("login_"+requestParam.getUsername(),30L,TimeUnit.MINUTES);
         return new UserLoginRespDTO(uuid);
     }
 
     @Override
-    public Boolean checkLogin(String token) {
-        return stringRedisTemplate.hasKey(token);
+    public Boolean checkLogin(String username,String token) {
+        return stringRedisTemplate.opsForHash().get("login_"+username,token) != null;
     }
 
 }
