@@ -64,7 +64,8 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/api/link/v1/user/logout")
-    public Result<Void> logout(){
+    public Result<Void> logout(@RequestParam("username") String username, @RequestParam("token")String token){
+        userService.logout(username,token);
         return Results.success();
     }
 
