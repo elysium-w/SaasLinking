@@ -2,6 +2,9 @@ package org.saas.admin.dto.resp;
 
 import lombok.Data;
 
+/**
+ * 分组返回实体
+ */
 @Data
 public class ShortLinkGroupRespDTO {
     /**
@@ -23,4 +26,9 @@ public class ShortLinkGroupRespDTO {
      * 创建分组用户名
      */
     private String username;
+    /**
+     * 分组排序
+     */
+    private Integer sortOrder;
+
 }
