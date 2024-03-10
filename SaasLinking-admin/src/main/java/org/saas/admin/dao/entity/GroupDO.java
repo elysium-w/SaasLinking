@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.units.qual.A;
+import org.saas.admin.common.database.BaseDO;
 
 import java.util.Date;
 
@@ -22,7 +23,7 @@ import java.util.Date;
 @AllArgsConstructor
 @TableName("t_group")
 
-public class GroupDO{
+public class GroupDO extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,19 +53,5 @@ public class GroupDO{
      */
     private Integer sortOrder;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
-
-    /**
-     * 删除标识 0：未删除 1：已删除
-     */
-    private int delFlag;
 
 }
