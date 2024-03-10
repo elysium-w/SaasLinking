@@ -1,4 +1,4 @@
-package org.saas.admin.dto.res;
+package org.saas.admin.dto.req;
 
 import lombok.Data;
 

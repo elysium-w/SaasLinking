@@ -14,9 +14,9 @@ import org.saas.admin.common.conversion.exception.ClientException;
 import org.saas.admin.common.enums.UserErrorCode;
 import org.saas.admin.dao.entity.UserDO;
 import org.saas.admin.dao.mapper.UserMapper;
-import org.saas.admin.dto.res.UserLoginReqDTO;
-import org.saas.admin.dto.res.UserRegisterReqDTO;
-import org.saas.admin.dto.res.UserUpdateReqDTO;
+import org.saas.admin.dto.req.UserLoginReqDTO;
+import org.saas.admin.dto.req.UserRegisterReqDTO;
+import org.saas.admin.dto.req.UserUpdateReqDTO;
 import org.saas.admin.dto.resp.UserLoginRespDTO;
 import org.saas.admin.dto.resp.UserRespDTO;
 import org.saas.admin.service.UserService;
@@ -25,10 +25,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.saas.admin.common.conversion.exception.ServiceException;
 
-import javax.print.attribute.HashDocAttributeSet;
 import java.util.DuplicateFormatFlagsException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 

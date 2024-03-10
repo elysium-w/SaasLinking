@@ -1,9 +1,9 @@
-package org.saas.admin.dto.res;
+package org.saas.admin.dto.req;
 
 import lombok.Data;
 
 @Data
-public class UserUpdateReqDTO {
+public class UserRegisterReqDTO {
     /**
      * id
      */

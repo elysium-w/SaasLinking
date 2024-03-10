@@ -2,9 +2,9 @@ package org.saas.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.saas.admin.dao.entity.UserDO;
-import org.saas.admin.dto.res.UserLoginReqDTO;
-import org.saas.admin.dto.res.UserRegisterReqDTO;
-import org.saas.admin.dto.res.UserUpdateReqDTO;
+import org.saas.admin.dto.req.UserLoginReqDTO;
+import org.saas.admin.dto.req.UserRegisterReqDTO;
+import org.saas.admin.dto.req.UserUpdateReqDTO;
 import org.saas.admin.dto.resp.UserLoginRespDTO;
 import org.saas.admin.dto.resp.UserRespDTO;
 
