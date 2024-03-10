@@ -53,14 +53,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     /**
      * 含有返回false，不含有返回true
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return 是否存在
      */
     @Override
     public Boolean hashUsername(String username) {
        return !userRegisterCachePenetrationBloomFilter.contains(username);
     }
 
+    /**
+     * 添加新用户
+     * @param requestParam    注册用户请求参数
+     */
     @Override
     public void register(UserRegisterReqDTO requestParam) {
         if (!hashUsername(requestParam.getUsername())){
@@ -87,6 +91,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         }
     }
 
+    /**
+     * 修改用户信息
+     * @param requestParam UserUpdateReqDTO
+     */
     @Override
     public void update(UserUpdateReqDTO requestParam) {
 //        TODO 验证当前用户名是否为登录用户
@@ -95,6 +103,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         baseMapper.update(BeanUtil.toBean(requestParam,UserDO.class),updateWrapper);
     }
 
+    /**
+     * 用户登录
+     * @param requestParam 用户登录请求参数
+     * @return UserLoginRespDTO
+     */
     @Override
     public UserLoginRespDTO login(UserLoginReqDTO requestParam) {
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class)
@@ -112,7 +125,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         }
         String uuid = UUID.randomUUID().toString();
         stringRedisTemplate.opsForHash().put("login_"+requestParam.getUsername(),uuid,JSON.toJSONString(userDO));
-        stringRedisTemplate.expire("login_"+requestParam.getUsername(),30L,TimeUnit.MINUTES);
+        stringRedisTemplate.expire("login_"+requestParam.getUsername(),30L,TimeUnit.DAYS);
         return new UserLoginRespDTO(uuid);
     }
 
