@@ -27,7 +27,7 @@ public class GroupController {
 
     /**
      * 查询短链接分组集合
-     * @return
+     * @return 短链接集合
      */
     @GetMapping("/api/link/v1/group")
     public Result<List<ShortLinkGroupRespDTO>> listGroup(){
@@ -36,12 +36,23 @@ public class GroupController {
 
     /**
      * 修改短链接分组名
-     * @param requestParam
-     * @return
+     * @param requestParam 修改短链接分组名请求体
+     * @return 修改结果
      */
     @PutMapping("/api/link/v1/group")
     public Result<Void> updateGroup(@RequestBody ShortLinkGroupUpdateReqDTO requestParam){
         groupService.updateGroup(requestParam);
+        return Results.success();
+    }
+
+    /**
+     * 删除短链接分组
+     * @param gid 短链接分组标识
+     * @return 删除结果
+     */
+    @DeleteMapping("/api/link/v1/group")
+    public Result<Void> deleteGroup(@RequestParam String gid){
+        groupService.deleteGroup(gid);
         return Results.success();
     }
 
