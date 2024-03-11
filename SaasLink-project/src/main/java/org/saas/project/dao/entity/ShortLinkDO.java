@@ -2,7 +2,10 @@ package org.saas.project.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.saas.project.common.database.BaseDO;
 
 import java.util.Date;
@@ -11,8 +14,11 @@ import java.util.Date;
  * 短链接实体
  */
 @Data
+@Builder
 @TableName("t_link")
-public class LinkDO extends BaseDO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ShortLinkDO extends BaseDO {
     /**
      * id
      */
