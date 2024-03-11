@@ -11,7 +11,7 @@ import java.util.List;
 public interface GroupService extends IService<GroupDO> {
     /**
      * 新增用户短链接分组
-     * @param groupName
+     * @param groupName 分组命名
      */
     void saveGroup(String groupName);
 
@@ -23,7 +23,7 @@ public interface GroupService extends IService<GroupDO> {
 
     /**
      * 修改短链接分组
-     * @param requestParam
+     * @param requestParam 修改信息
      */
     void updateGroup(ShortLinkGroupUpdateReqDTO requestParam);
 

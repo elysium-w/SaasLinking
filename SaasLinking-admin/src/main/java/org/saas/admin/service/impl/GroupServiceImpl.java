@@ -3,7 +3,6 @@ package org.saas.admin.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import groovy.util.logging.Slf4j;
@@ -75,7 +74,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper,GroupDO> implement
             GroupDO groupDO = GroupDO.builder()
                     .sortOrder(each.getSortOrder())
                     .build();
-            LambdaUpdateWrapper<GroupDO> updateWrapper = Wrappers.lambdaUpdate(GroupDO.class)
+             LambdaUpdateWrapper<GroupDO> updateWrapper = Wrappers.lambdaUpdate(GroupDO.class)
                     .eq(GroupDO::getUsername,UserContext.getUsername())
                     .eq(GroupDO::getGid,each.getGid())
                     .eq(GroupDO::getDelFlag,0);
