@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.common.conversion.result.Results;
 import org.saas.admin.dto.req.ShortLinkGroupSaveReqDTO;
+import org.saas.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.saas.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.saas.admin.dto.resp.ShortLinkGroupRespDTO;
 import org.saas.admin.service.GroupService;
@@ -56,8 +57,14 @@ public class GroupController {
         return Results.success();
     }
 
-//    @PostMapping("/api/link/v1/group")
-//    public Result<Void> sortGroup(){
-//        return Results.success();
-//    }
+    /**
+     * 前端对短链接分组进行排序，后端按照前端传回来的顺序进行排序
+     * 短链接分组排序
+     * @return 排序结果
+     */
+    @PostMapping("/api/link/v1/group/sort")
+    public Result<Void> sortGroup(@RequestBody List<ShortLinkGroupSortReqDTO> requestParam){
+        groupService.sortGroup(requestParam);
+        return Results.success();
+    }
 }

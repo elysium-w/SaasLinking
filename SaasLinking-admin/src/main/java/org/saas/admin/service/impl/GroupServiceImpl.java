@@ -10,6 +10,7 @@ import groovy.util.logging.Slf4j;
 import org.saas.admin.common.biz.user.UserContext;
 import org.saas.admin.dao.entity.GroupDO;
 import org.saas.admin.dao.mapper.GroupMapper;
+import org.saas.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.saas.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.saas.admin.dto.resp.ShortLinkGroupRespDTO;
 import org.saas.admin.service.GroupService;
@@ -66,6 +67,20 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper,GroupDO> implement
         GroupDO groupDO = new GroupDO();
         groupDO.setDelFlag(1);
         baseMapper.update(groupDO,updateWrapper);
+    }
+
+    @Override
+    public void sortGroup(List<ShortLinkGroupSortReqDTO> requestParam) {
+        requestParam.forEach(each -> {
+            GroupDO groupDO = GroupDO.builder()
+                    .sortOrder(each.getSortOrder())
+                    .build();
+            LambdaUpdateWrapper<GroupDO> updateWrapper = Wrappers.lambdaUpdate(GroupDO.class)
+                    .eq(GroupDO::getUsername,UserContext.getUsername())
+                    .eq(GroupDO::getGid,each.getGid())
+                    .eq(GroupDO::getDelFlag,0);
+            baseMapper.update(groupDO,updateWrapper);
+        });
     }
 
     public boolean hasGid(String gid){
