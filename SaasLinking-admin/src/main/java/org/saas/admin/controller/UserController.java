@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @GetMapping("/api/link/v1/user/{username}")
+    @GetMapping("/api/link/admin/v1/user/{username}")
     public Result<UserRespDTO> getUserByUsername(@PathVariable("username")String username){
         return Results.success(userService.getUserByUsername(username));
     }
-    @GetMapping("/api/link/v1/actual/user/{username}")
+    @GetMapping("/api/link/admin/v1/actual/user/{username}")
     public Result<UserActuralRespDTO> getActualUserByUsername(@PathVariable("username")String username){
         return Results.success(BeanUtil.toBean(userService.getUserByUsername(username), UserActuralRespDTO.class));
     }
-    @GetMapping("/api/link/v1/user/has-username")
+    @GetMapping("/api/link/admin/v1/user/has-username")
     public Result<Boolean> hashUsername(@RequestParam("username")String username){
         return Results.success(!userService.hashUsername(username));
     }
     /**
      * 注册用户
      */
-    @PostMapping("/api/link/v1/user/")
+    @PostMapping("/api/link/admin/v1/user/")
     public Result<Void> userRegister(@RequestBody UserRegisterReqDTO requestParam){
         userService.register(requestParam);
         return Results.success();
@@ -40,7 +40,7 @@ public class UserController {
     /**
      * 修改用户信息
      */
-    @PutMapping("/api/link/v1/user/")
+    @PutMapping("/api/link/admin/v1/user/")
     public Result<Void> userUpdate(@RequestBody UserUpdateReqDTO requestParam){
         userService.update(requestParam);
         return Results.success();
@@ -49,11 +49,11 @@ public class UserController {
     /**
      *  用户登录信息
      */
-    @PostMapping("/api/link/v1/user/login")
+    @PostMapping("/api/link/admin/v1/user/login")
     public Result<UserLoginRespDTO> userLogin(@RequestBody UserLoginReqDTO requestParam){
         return Results.success(userService.login(requestParam));
     }
-    @GetMapping("/api/link/v1/user/check-login")
+    @GetMapping("/api/link/admin/v1/user/check-login")
     public Result<Boolean> checkLogin (@RequestParam("username") String username, @RequestParam("token")String token){
         return  Results.success(userService.checkLogin(username,token));
     }
@@ -62,7 +62,7 @@ public class UserController {
      * 用户退出登录
      * @return
      */
-    @DeleteMapping("/api/link/v1/user/logout")
+    @DeleteMapping("/api/link/admin/v1/user/logout")
     public Result<Void> logout(@RequestParam("username") String username, @RequestParam("token")String token){
         userService.logout(username,token);
         return Results.success();
