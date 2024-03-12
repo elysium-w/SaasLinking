@@ -16,15 +16,27 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
+
+    /**
+     * 根据用户名查询用户信息
+     */
     @GetMapping("/api/link/admin/v1/user/{username}")
-    public Result<UserRespDTO> getUserByUsername(@PathVariable("username")String username){
+    public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username){
         return Results.success(userService.getUserByUsername(username));
     }
+
+    /**
+     * 根据用户名查询无脱敏用户信息
+     */
     @GetMapping("/api/link/admin/v1/actual/user/{username}")
     public Result<UserActuralRespDTO> getActualUserByUsername(@PathVariable("username")String username){
         return Results.success(BeanUtil.toBean(userService.getUserByUsername(username), UserActuralRespDTO.class));
     }
+    /**
+     * 查询用户名是否存在
+     */
     @GetMapping("/api/link/admin/v1/user/has-username")
     public Result<Boolean> hashUsername(@RequestParam("username")String username){
         return Results.success(!userService.hashUsername(username));
@@ -53,14 +65,18 @@ public class UserController {
     public Result<UserLoginRespDTO> userLogin(@RequestBody UserLoginReqDTO requestParam){
         return Results.success(userService.login(requestParam));
     }
+
+    /**
+     * 检查用户是否登陆
+     */
     @GetMapping("/api/link/admin/v1/user/check-login")
     public Result<Boolean> checkLogin (@RequestParam("username") String username, @RequestParam("token")String token){
-        return  Results.success(userService.checkLogin(username,token));
+        boolean res =  userService.checkLogin(username,token);
+        return  Results.success(res);
     }
 
     /**
      * 用户退出登录
-     * @return
      */
     @DeleteMapping("/api/link/admin/v1/user/logout")
     public Result<Void> logout(@RequestParam("username") String username, @RequestParam("token")String token){

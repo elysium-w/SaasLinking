@@ -44,8 +44,8 @@ public final class Results {
         String errorMessage = Optional.ofNullable(exception.getErrorMessage())
                 .orElse(BaseErrorCode.SERVICE_ERROR.message());
         return new Result<Void>()
-                .setCode(BaseErrorCode.SERVICE_ERROR.code())
-                ;
+                .setCode(errorCode)
+                .setMessage(errorMessage);
     }
     /**
      * 通过 errorCode、errorMessage 构建失败响应

@@ -110,21 +110,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
      */
     @Override
     public UserLoginRespDTO login(UserLoginReqDTO requestParam) {
+//        检查用户是否存在于数据库
         LambdaQueryWrapper<UserDO> queryWrapper = Wrappers.lambdaQuery(UserDO.class)
                 .eq(UserDO::getUsername,requestParam.getUsername())
                 .eq(UserDO::getPassword,requestParam.getPassword())
                 .eq(UserDO::getDelFlag,0);
         UserDO userDO = baseMapper.selectOne(queryWrapper);
-
+//        不存在用户
         if (userDO == null){
             throw new ClientException(USER_NULL);
         }
+//        检查用户是否已经登陆，就是检查redis中是否存在这个用户
         Boolean hasLogin = stringRedisTemplate.hasKey("login_"+requestParam.getUsername());
         if (hasLogin != null && hasLogin){
             throw new ClientException("用户已登录");
         }
+//        生成用户token
         String uuid = UUID.randomUUID().toString();
         stringRedisTemplate.opsForHash().put("login_"+requestParam.getUsername(),uuid,JSON.toJSONString(userDO));
+//        设置登陆的过期时间为30天
         stringRedisTemplate.expire("login_"+requestParam.getUsername(),30L,TimeUnit.DAYS);
         return new UserLoginRespDTO(uuid);
     }
