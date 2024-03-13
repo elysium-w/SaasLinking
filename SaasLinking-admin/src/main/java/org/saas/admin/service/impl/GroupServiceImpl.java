@@ -17,16 +17,22 @@ import org.saas.admin.tookit.RadomGenerator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class GroupServiceImpl extends ServiceImpl<GroupMapper,GroupDO> implements GroupService {
     @Override
     public void saveGroup(String groupName) {
+        saveGroup(UserContext.getUsername(), groupName);
+    }
+
+    @Override
+    public void saveGroup(String username,String groupName) {
         String gid;
         do {
             gid = RadomGenerator.generateRandomDigits();
-        }while (!hasGid(gid));
+        }while (!hasGid(username,gid));
         GroupDO group = GroupDO.builder()
                 .gid(gid)
                 .username(UserContext.getUsername())
@@ -82,12 +88,11 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper,GroupDO> implement
         });
     }
 
-    public boolean hasGid(String gid){
-        LambdaQueryWrapper<GroupDO> query =  Wrappers.lambdaQuery(GroupDO.class)
-                .eq(GroupDO::getGid,gid)
-                .eq(GroupDO::getUsername,null);
-
-        GroupDO hasGroupGid = baseMapper.selectOne(query);
-        return hasGroupGid == null;
+    public boolean hasGid(String username,String gid){
+        LambdaQueryWrapper<GroupDO> queryWrapper = Wrappers.lambdaQuery(GroupDO.class)
+                .eq(GroupDO::getGid, gid)
+                .eq(GroupDO::getUsername, Optional.ofNullable(username).orElse(UserContext.getUsername()));
+        GroupDO hasGroupFlag = baseMapper.selectOne(queryWrapper);
+        return hasGroupFlag == null;
     }
 }

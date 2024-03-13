@@ -44,7 +44,7 @@ public class UserController {
     /**
      * 注册用户
      */
-    @PostMapping("/api/link/admin/v1/user/")
+    @PostMapping("/api/link/admin/v1/user")
     public Result<Void> userRegister(@RequestBody UserRegisterReqDTO requestParam){
         userService.register(requestParam);
         return Results.success();
@@ -52,7 +52,7 @@ public class UserController {
     /**
      * 修改用户信息
      */
-    @PutMapping("/api/link/admin/v1/user/")
+    @PutMapping("/api/link/admin/v1/user")
     public Result<Void> userUpdate(@RequestBody UserUpdateReqDTO requestParam){
         userService.update(requestParam);
         return Results.success();
