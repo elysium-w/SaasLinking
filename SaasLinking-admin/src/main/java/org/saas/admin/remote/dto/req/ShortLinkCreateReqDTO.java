@@ -1,6 +1,5 @@
 package org.saas.admin.remote.dto.req;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 

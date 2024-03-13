@@ -85,7 +85,8 @@ public class ShortLinkServiceImpl extends ServiceImpl<LinkMapper, ShortLinkDO> i
             String originUrl = requestParam.getOriginUrl();
             originUrl += System.currentTimeMillis();
             shortUri = HashUtil.hashToBase62(originUrl);
-            /**
+
+            /*
              * 如果在布龙过滤器中找到对应短链接，则再次创建，否，则返回创建好的短链接
              */
             if (!shortUriCreateCachePenetrationBloomFilter.contains(requestParam.getDomain() + "/" + shortUri)){
