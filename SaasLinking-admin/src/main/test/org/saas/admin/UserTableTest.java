@@ -9,8 +9,9 @@ public class UserTableTest {
             "  `origin_url` varchar(1024) DEFAULT NULL COMMENT '原始链接',\n" +
             "  `click_num` int NULL DEFAULT '0' COMMENT '点击次数',\n" +
             "  `gid` varchar(32) DEFAULT 'default' COMMENT '分组标识',\n" +
+            "  `favicon` varchar(256) DEFAULT 'default' COMMENT '网站图标',\n"+
             "  `enable_status` tinyint(1) DEFAULT NULL COMMENT '启用标识',\n" +
-            "  `create_status` tinyint(1) DEFAULT NULL COMMENT '创建类型',\n" +
+            "  `created_type` tinyint(1) DEFAULT NULL COMMENT '创建类型',\n" +
             "  `valid_date_type` tinyint(1) DEFAULT NULL COMMENT '有效期类型',\n" +
             "  `valid_date` datetime DEFAULT NULL COMMENT '有效期',\n" +
             "  `describe` varchar(1024) DEFAULT NULL COMMENT '描述',\n" +

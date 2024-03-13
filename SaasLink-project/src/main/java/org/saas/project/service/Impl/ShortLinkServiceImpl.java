@@ -3,6 +3,7 @@ package org.saas.project.service.Impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.StrBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import groovy.util.logging.Slf4j;
@@ -12,7 +13,9 @@ import org.saas.project.common.conversion.exception.ServiceException;
 import org.saas.project.dao.entity.ShortLinkDO;
 import org.saas.project.dao.mapper.LinkMapper;
 import org.saas.project.dto.req.ShortLinkCreateReqDTO;
+import org.saas.project.dto.req.ShortLinkPageReqDTO;
 import org.saas.project.dto.resp.ShortLinkCreateRespDTO;
+import org.saas.project.dto.resp.ShortLinkPageRespDTO;
 import org.saas.project.service.ShortLinkService;
 import org.saas.project.tookit.HashUtil;
 import org.springframework.dao.DuplicateKeyException;
@@ -61,6 +64,17 @@ public class ShortLinkServiceImpl extends ServiceImpl<LinkMapper, ShortLinkDO> i
                 .originUrl(requestParam.getOriginUrl())
                 .build();
     }
+
+    @Override
+    public IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkPageReqDTO requestParam) {
+        LambdaQueryWrapper<ShortLinkDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)
+                .eq(ShortLinkDO::getGid,requestParam.getGid())
+                .eq(ShortLinkDO::getEnableStatus,0)
+                .eq(ShortLinkDO::getDelFlag,0);
+        IPage<ShortLinkDO> page = baseMapper.selectPage(requestParam,queryWrapper);
+        return page.convert(each -> BeanUtil.toBean(each, ShortLinkPageRespDTO.class));
+    }
+
     public String generateSuffix(ShortLinkCreateReqDTO requestParam){
         int customGenerateCount = 0;
         String shortUri;
