@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 短链接控制层
+ */
 @RestController
 @RequiredArgsConstructor
 public class ShortLinkController {
@@ -26,6 +29,10 @@ public class ShortLinkController {
     public Result<ShortLinkCreateRespDTO> createShortLink(@RequestBody ShortLinkCreateReqDTO requestParam){
         return Results.success(linkService.createLink(requestParam));
     }
+
+    /**
+     * 分页查询短链接
+     */
     @GetMapping("/api/link/project/v1/page")
     public Result<IPage<ShortLinkPageRespDTO>> pageShortLink(ShortLinkPageReqDTO requestParam){
         return Results.success(linkService.pageShortLink(requestParam));
