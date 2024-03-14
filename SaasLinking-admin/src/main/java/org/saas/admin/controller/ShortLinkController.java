@@ -2,7 +2,7 @@ package org.saas.admin.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.saas.admin.common.conversion.result.Result;
-import org.saas.admin.remote.dto.ShortLinkRemoteService;
+import org.saas.admin.remote.ShortLinkRemoteService;
 import org.saas.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkPageReqDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkCreateRespDTO;

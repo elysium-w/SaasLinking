@@ -1,4 +1,4 @@
-package org.saas.admin.remote.dto;
+package org.saas.admin.remote;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
