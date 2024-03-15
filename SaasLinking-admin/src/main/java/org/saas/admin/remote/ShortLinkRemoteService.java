@@ -7,9 +7,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkPageReqDTO;
+import org.saas.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkCreateRespDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkPageRespDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,5 +59,12 @@ public interface ShortLinkRemoteService {
         String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/link/project/v1/count", requestMap);
         return JSON.parseObject(resultPageStr, new TypeReference<>() {
         });
+    }
+    /**
+     * 修改短链接
+     * @param requestParam 修改短链接参数
+     */
+    default void updateShortLink(@RequestBody ShortLinkUpdateReqDTO requestParam){
+        HttpUtil.post("http://127.0.0.1:8001/api/link/project/v1/update", JSON.toJSONString(requestParam));
     }
 }
