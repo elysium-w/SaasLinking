@@ -41,7 +41,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper,GroupDO> implement
         }while (!hasGid(username,gid));
         GroupDO group = GroupDO.builder()
                 .gid(gid)
-                .username(UserContext.getUsername())
+                .username(username)
                 .name(groupName)
                 .sortOrder(0)
                 .build();

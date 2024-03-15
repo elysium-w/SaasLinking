@@ -19,6 +19,7 @@ import org.saas.admin.dto.req.UserRegisterReqDTO;
 import org.saas.admin.dto.req.UserUpdateReqDTO;
 import org.saas.admin.dto.resp.UserLoginRespDTO;
 import org.saas.admin.dto.resp.UserRespDTO;
+import org.saas.admin.service.GroupService;
 import org.saas.admin.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -38,6 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
+    private final GroupService groupService;
     @Override
     public UserRespDTO getUserByUsername(String username) {
         LambdaQueryWrapper<UserDO> query= Wrappers.lambdaQuery(UserDO.class)
@@ -82,6 +84,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                     throw new ClientException(USER_EXIST);
                 }
                 userRegisterCachePenetrationBloomFilter.add(requestParam.getUsername());
+                //        新建用户时默认创建短链接分组
+                groupService.saveGroup(requestParam.getUsername(),"默认分组");
                 return;
             }
             throw new ClientException(USER_NAME_EXIST);
