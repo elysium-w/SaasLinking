@@ -1,11 +1,13 @@
 package org.saas.project.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.saas.project.common.conversion.result.Result;
 import org.saas.project.common.conversion.result.Results;
 import org.saas.project.dto.req.ShortLinkCreateReqDTO;
 import org.saas.project.dto.req.ShortLinkPageReqDTO;
+import org.saas.project.dto.req.ShortLinkUpdateReqDTO;
 import org.saas.project.dto.resp.ShortLinkCreateRespDTO;
 import org.saas.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import org.saas.project.dto.resp.ShortLinkPageRespDTO;
@@ -44,5 +46,12 @@ public class ShortLinkController {
     public Result<List<ShortLinkGroupCountQueryRespDTO>> listGroupShortLinkCount(@RequestParam("requestParam") List<String> requestParam){
         return Results.success(linkService.listGroupShortLinkCount(requestParam));
     }
-
+    /**
+     * 修改短链接
+     */
+    @PostMapping("/api/link/project/v1/update")
+    public Result<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO requestParam){
+        linkService.updateShortLink(requestParam);
+        return Results.success();
+    }
 }
