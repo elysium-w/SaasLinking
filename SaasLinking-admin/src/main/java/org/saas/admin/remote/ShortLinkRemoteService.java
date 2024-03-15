@@ -8,9 +8,11 @@ import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkPageReqDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkCreateRespDTO;
+import org.saas.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkPageRespDTO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,12 +30,31 @@ public interface ShortLinkRemoteService {
         });
     }
 
+    /**
+     * 短链接分页查询
+     * @param requestParam 分页查询参数
+     * @return 分页查询结果
+     */
+
     default Result<IPage<ShortLinkPageRespDTO>> pageShortLink(ShortLinkPageReqDTO requestParam){
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("gid",requestParam.getGid());
         requestMap.put("current", requestParam.getCurrent());
         requestMap.put("size", requestParam.getSize());
         String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/link/project/v1/page", requestMap);
+        return JSON.parseObject(resultPageStr, new TypeReference<>() {
+        });
+    }
+
+    /**
+     *
+     * @param requestParam 查询分组内数量参数
+     * @return 查询分组内数量响应结果
+     */
+    default Result<List<ShortLinkGroupCountQueryRespDTO>> listGroupShortLinkCount(List<String> requestParam){
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("requestParam",requestParam);
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/link/project/v1/count", requestMap);
         return JSON.parseObject(resultPageStr, new TypeReference<>() {
         });
     }
