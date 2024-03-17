@@ -92,7 +92,11 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             }
         }
 //        缓存预热，创建的时候直接加入缓存里面
-        stringRedisTemplate.opsForValue().set(fullShortUrl,requestParam.getOriginUrl(), LinkUtil.getLinkCacheValidDate(requestParam.getValidDate()), TimeUnit.MILLISECONDS);
+        stringRedisTemplate.opsForValue().set(
+                String.format(GOTO_SHORT_LINK_KEY,fullShortUrl),
+                requestParam.getOriginUrl(),
+                LinkUtil.getLinkCacheValidDate(requestParam.getValidDate()), TimeUnit.MILLISECONDS
+        );
         shortUriCreateCachePenetrationBloomFilter.add(fullShortUrl);
         return ShortLinkCreateRespDTO.builder()
                 .fullShortUrl("http://" + linkDO.getFullShortUrl())
@@ -214,7 +218,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     .eq(ShortLinkGotoDO::getFullShortUrl,fullShortUrl);
             ShortLinkGotoDO shortLinkGotoDO = shortLinkGotoMapper.selectOne(linkGotoDOWrapper);
             if (shortLinkGotoDO != null){
-                stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY,fullShortUrl),"-");
+                stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY,fullShortUrl),"-", 30, TimeUnit.MINUTES);
                 ((HttpServletResponse) response).sendRedirect("/page/notfound");
                 return;
             }
@@ -226,9 +230,12 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             ShortLinkDO shortLinkDO = baseMapper.selectOne(queryWrapper);
 //        短链接表内有数据，则进行跳转
             if (shortLinkDO != null){
-//                    如果缓存内为空，则重新加载到缓存内
-                stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY,fullShortUrl),shortLinkDO.getOriginUrl());
-
+                stringRedisTemplate.opsForValue().set(
+                        String.format(GOTO_SHORT_LINK_KEY,fullShortUrl),
+                        shortLinkDO.getOriginUrl(),
+                        LinkUtil.getLinkCacheValidDate(shortLinkDO.getValidDate()), TimeUnit.MILLISECONDS
+                );
+                ((HttpServletResponse) response).sendRedirect(shortLinkDO.getOriginUrl());
             }
         }finally {
             lock.unlock();
