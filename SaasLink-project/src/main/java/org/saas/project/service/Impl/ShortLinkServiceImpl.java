@@ -34,6 +34,7 @@ import org.saas.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import org.saas.project.dto.resp.ShortLinkPageRespDTO;
 import org.saas.project.service.ShortLinkService;
 import org.saas.project.tookit.HashUtil;
+import org.saas.project.tookit.LinkUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
-import static org.saas.project.common.constant.RedisKeyConstant.GOTO_SHORT_LINK_KEY;
-import static org.saas.project.common.constant.RedisKeyConstant.LOCK_GOTO_SHORT_LINK_KEY;
+import static org.saas.project.common.constant.RedisKeyConstant.*;
 
 @Slf4j
 @Service
@@ -90,6 +91,8 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 throw new ServiceException("短链接生成重复");
             }
         }
+//        缓存预热，创建的时候直接加入缓存里面
+        stringRedisTemplate.opsForValue().set(fullShortUrl,requestParam.getOriginUrl(), LinkUtil.getLinkCacheValidDate(requestParam.getValidDate()), TimeUnit.MILLISECONDS);
         shortUriCreateCachePenetrationBloomFilter.add(fullShortUrl);
         return ShortLinkCreateRespDTO.builder()
                 .fullShortUrl("http://" + linkDO.getFullShortUrl())
@@ -171,52 +174,65 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         }
     }
 
-    @SneakyThrows
+   @SneakyThrows
     @Override
     public void restoreUrl(String shortUri, ServletRequest request, ServletResponse response){
         String serverName = request.getServerName();
-        String serverPort = Optional.of(request.getServerPort())
-                .filter(each -> !Objects.equals(each,80))
-                .map(String::valueOf)
-                .map(each -> ":" + each)
-                .orElse("");
+//        String serverPort = Optional.of(request.getServerPort())
+//                .filter(each -> !Objects.equals(each,80))
+//                .map(String::valueOf)
+//                .map(each -> ":" + each)
+//                .orElse("");
         String fullShortUrl = serverName + "/" + shortUri;
         String originalLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_SHORT_LINK_KEY,fullShortUrl));
-        if (StrUtil.isBlankIfStr(originalLink)){
-//            解决缓存击穿，加分布式锁
-            RLock lock = redissonClient.getLock(String.format(LOCK_GOTO_SHORT_LINK_KEY,fullShortUrl));
-            lock.lock();
-            try {
-                originalLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_SHORT_LINK_KEY,fullShortUrl));
-                if (StrUtil.isNotBlank(originalLink)){
-                    ((HttpServletResponse) response).sendRedirect(originalLink);
-                    return;
-                }
-                LambdaQueryWrapper<ShortLinkGotoDO> linkGotoDOWrapper = Wrappers.lambdaQuery(ShortLinkGotoDO.class)
-                        .eq(ShortLinkGotoDO::getFullShortUrl,fullShortUrl);
-                ShortLinkGotoDO shortLinkGotoDO = shortLinkGotoMapper.selectOne(linkGotoDOWrapper);
-                if (shortLinkGotoDO != null){
-//            TODO :封控
-                    return;
-                }
-                LambdaQueryWrapper<ShortLinkDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)
-                        .eq(ShortLinkDO::getGid,shortLinkGotoDO.getGid())
-                        .eq(ShortLinkDO::getEnableStatus,0)
-                        .eq(ShortLinkDO::getDelFlag,0);
-                ShortLinkDO shortLinkDO = baseMapper.selectOne(queryWrapper);
-//        短链接表内有数据，则进行跳转
-                if (shortLinkDO != null){
-//                    如果缓存内为空，则重新加载到缓存内
-                    stringRedisTemplate.opsForValue().set(String.format(GOTO_SHORT_LINK_KEY,fullShortUrl),shortLinkDO.getOriginUrl());
-
-                }
-            }finally {
-                lock.unlock();
-            }
-
+//        先查缓存，如果缓存有则直接跳转
+        if (StrUtil.isNotBlank(originalLink)){
+            ((HttpServletResponse) response).sendRedirect(originalLink);
+            return;
+        }
+        boolean isContains = shortUriCreateCachePenetrationBloomFilter.contains(fullShortUrl);
+        if (!isContains){
+            ((HttpServletResponse) response).sendRedirect("/page/notfound");
+            return;
+        }
+        String gotoIsNull = stringRedisTemplate.opsForValue().get(String.format(GOTO_IS_NULL_SHORT_LINK_KEY,fullShortUrl));
+        if (StrUtil.isNotBlank(gotoIsNull)){
+            ((HttpServletResponse) response).sendRedirect("/page/notfound");
+            return;
         }
 
+//            解决缓存击穿，加分布式锁
+        RLock lock = redissonClient.getLock(String.format(LOCK_GOTO_SHORT_LINK_KEY,fullShortUrl));
+        lock.lock();
+        try {
+            originalLink = stringRedisTemplate.opsForValue().get(String.format(GOTO_SHORT_LINK_KEY,fullShortUrl));
+            if (StrUtil.isNotBlank(originalLink)){
+                ((HttpServletResponse) response).sendRedirect(originalLink);
+                return;
+            }
+            LambdaQueryWrapper<ShortLinkGotoDO> linkGotoDOWrapper = Wrappers.lambdaQuery(ShortLinkGotoDO.class)
+                    .eq(ShortLinkGotoDO::getFullShortUrl,fullShortUrl);
+            ShortLinkGotoDO shortLinkGotoDO = shortLinkGotoMapper.selectOne(linkGotoDOWrapper);
+            if (shortLinkGotoDO != null){
+                stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY,fullShortUrl),"-");
+                ((HttpServletResponse) response).sendRedirect("/page/notfound");
+                return;
+            }
+            LambdaQueryWrapper<ShortLinkDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)
+                    .eq(ShortLinkDO::getGid,shortLinkGotoDO.getGid())
+                    .eq(ShortLinkDO::getFullShortUrl, fullShortUrl)
+                    .eq(ShortLinkDO::getEnableStatus,0)
+                    .eq(ShortLinkDO::getDelFlag,0);
+            ShortLinkDO shortLinkDO = baseMapper.selectOne(queryWrapper);
+//        短链接表内有数据，则进行跳转
+            if (shortLinkDO != null){
+//                    如果缓存内为空，则重新加载到缓存内
+                stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY,fullShortUrl),shortLinkDO.getOriginUrl());
 
+            }
+        }finally {
+            lock.unlock();
+        }
     }
 
     public String generateSuffix(ShortLinkCreateReqDTO requestParam){
