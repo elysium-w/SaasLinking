@@ -12,6 +12,7 @@ import org.saas.admin.remote.dto.resp.ShortLinkCreateRespDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkPageRespDTO;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,4 +68,17 @@ public interface ShortLinkRemoteService {
     default void updateShortLink(@RequestBody ShortLinkUpdateReqDTO requestParam){
         HttpUtil.post("http://127.0.0.1:8001/api/link/project/v1/update", JSON.toJSONString(requestParam));
     }
+
+    /**
+     * 根据url获取标题
+     * @param url url
+     * @return 网站标题
+     */
+    default Result<String> getTitleFromUrl(@RequestParam("url") String url){
+        String resultStr = HttpUtil.get("http://127.0.0.1:8001/api/link/project/v1/title?url=" + url);
+        return JSON.parseObject(resultStr, new TypeReference<>() {
+        });
+    }
+
+
 }

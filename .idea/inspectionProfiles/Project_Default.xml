@@ -103,6 +103,7 @@
           <option value="SaasLink-project" />
           <option value="SaasLink-project" />
           <option value="SaasLink-project" />
+          <option value="SaasLink-project" />
         </list>
       </option>
       <option name="ignoredPackages">
@@ -139,10 +140,12 @@
           <option value="log4j:log4j:1.2.17" />
           <option value="org.apache.zookeeper:zookeeper:3.6.0" />
           <option value="org.bouncycastle:bcprov-jdk15on:1.70" />
+          <option value="org.jsoup:jsoup:1.14.3" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
