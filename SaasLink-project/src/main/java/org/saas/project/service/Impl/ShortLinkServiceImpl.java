@@ -19,7 +19,7 @@ import lombok.SneakyThrows;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.saas.admin.common.conversion.exception.ClientException;
+import org.saas.project.common.conversion.exception.ClientException;
 import org.saas.project.common.conversion.exception.ServiceException;
 import org.saas.project.common.enums.VailDateTypeEnum;
 import org.saas.project.dao.entity.ShortLinkDO;
