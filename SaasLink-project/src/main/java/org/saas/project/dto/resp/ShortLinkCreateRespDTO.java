@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShortLinkCreateRespDTO {
+
     /**
      * 分组标识
      */

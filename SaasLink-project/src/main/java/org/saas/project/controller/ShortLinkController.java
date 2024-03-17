@@ -1,6 +1,8 @@
 package org.saas.project.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.saas.project.common.conversion.result.Result;
@@ -12,6 +14,7 @@ import org.saas.project.dto.resp.ShortLinkCreateRespDTO;
 import org.saas.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import org.saas.project.dto.resp.ShortLinkPageRespDTO;
 import org.saas.project.service.ShortLinkService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +26,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShortLinkController {
     private final ShortLinkService linkService;
+    /**
+     * 短链接跳转原始链接
+     */
+    @GetMapping("/{short-uri}")
+    public void restoreUrl(@PathVariable("short-uri") String shortUri, ServletRequest request, ServletResponse response){
+        linkService.restoreUrl(shortUri,request,response);
+    }
 
     /**
      * 创建短链接
