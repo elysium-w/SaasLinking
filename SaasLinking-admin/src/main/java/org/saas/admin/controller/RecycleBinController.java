@@ -1,10 +1,10 @@
-package org.saas.project.controller;
+package org.saas.admin.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.saas.project.common.conversion.result.Result;
-import org.saas.project.common.conversion.result.Results;
-import org.saas.project.dto.req.RecycleBinReqDTO;
-import org.saas.project.service.RecycleBinService;
+import org.saas.admin.common.conversion.result.Result;
+import org.saas.admin.common.conversion.result.Results;
+import org.saas.admin.dto.req.RecycleBinReqDTO;
+import org.saas.admin.remote.ShortLinkRemoteService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RecycleBinController {
 
-    private final RecycleBinService recycleBinService;
-    @PostMapping("/api/link/v1/recycle-bin/save")
+    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
+    };
+    @PostMapping("/api/link/admin/v1/recycle-bin/save")
     public Result<Void> saveRecycleBin(@RequestBody RecycleBinReqDTO requestParam){
-        recycleBinService.saveRecycleBin(requestParam);
+        shortLinkRemoteService.saveRecycleBin(requestParam);
         return Results.success();
     }
 }
