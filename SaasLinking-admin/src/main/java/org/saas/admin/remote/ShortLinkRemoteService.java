@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.dto.req.RecycleBinRecoverReq;
+import org.saas.admin.dto.req.RecycleBinRemoveReq;
 import org.saas.admin.dto.req.RecycleBinReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkPageReqDTO;
@@ -110,4 +111,10 @@ public interface ShortLinkRemoteService {
         HttpUtil.post("http://127.0.0.1:8001/api/link/v1/recycle-bin/recover", JSON.toJSONString(requestParam));
     }
 
+    /**
+     *回收站删除短链接
+     */
+    default void removeRecycleBin(RecycleBinRemoveReq requestParam){
+        HttpUtil.post("http://127.0.0.1:8001/api/link/v1/recycle-bin/remove", JSON.toJSONString(requestParam));
+    }
 }

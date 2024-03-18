@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.saas.project.common.conversion.result.Result;
 import org.saas.project.common.conversion.result.Results;
 import org.saas.project.dto.req.RecycleBinRecoverReq;
+import org.saas.project.dto.req.RecycleBinRemoveReq;
 import org.saas.project.dto.req.RecycleBinReqDTO;
 import org.saas.project.dto.req.ShortLinkRecycleBinPageReqDTO;
 import org.saas.project.dto.resp.ShortLinkPageRespDTO;
@@ -50,10 +51,12 @@ public class RecycleBinController {
         return Results.success();
     }
 
-//    /**
-//     * 回收站移除短链接
-//     */
-//    public Result<Void> removeRecycleBin(){
-//
-//    }
+    /**
+     * 回收站移除短链接
+     */
+    @PostMapping("/api/link/v1/recycle-bin/remove")
+    public Result<Void> removeRecycleBin(@RequestBody RecycleBinRemoveReq requestParam){
+        recycleBinService.removeRecycleBin(requestParam);
+        return Results.success();
+    }
 }
