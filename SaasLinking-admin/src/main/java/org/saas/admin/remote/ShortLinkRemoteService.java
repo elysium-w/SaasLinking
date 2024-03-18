@@ -8,6 +8,7 @@ import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.dto.req.RecycleBinReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkPageReqDTO;
+import org.saas.admin.remote.dto.req.ShortLinkRecycleBinPageReqDTO;
 import org.saas.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkCreateRespDTO;
 import org.saas.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
@@ -81,8 +82,25 @@ public interface ShortLinkRemoteService {
         });
     }
 
-
+    /**
+     * 链接移至回收站
+     */
     default void saveRecycleBin(RecycleBinReqDTO requestParam){
         HttpUtil.post("http://127.0.0.1:8001/api/link/v1/recycle-bin/save", JSON.toJSONString(requestParam));
     }
+
+    /**
+     * 分页查询回收站短链接
+     */
+    default Result<IPage<ShortLinkPageRespDTO>> pageRecycleBinShortLink(ShortLinkRecycleBinPageReqDTO requestParam){
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("gidList",requestParam.getGidList());
+        requestMap.put("current", requestParam.getCurrent());
+        requestMap.put("size", requestParam.getSize());
+        String resultPageStr = HttpUtil.get("http://127.0.0.1:8001/api/link/v1/recycle-bin/page", requestMap);
+        return JSON.parseObject(resultPageStr, new TypeReference<>() {
+        });
+    }
+
+
 }
