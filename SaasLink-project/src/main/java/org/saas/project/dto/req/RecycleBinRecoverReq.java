@@ -1,14 +1,12 @@
 package org.saas.project.dto.req;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 /**
- * 修改短链接参数
+ * 恢复短链接参数
  */
 @Data
-@RequiredArgsConstructor
-public class RecycleBinReqDTO {
+public class RecycleBinRecoverReq {
     /**
      * 分组标识
      */
@@ -18,5 +16,4 @@ public class RecycleBinReqDTO {
      * 完整短链接
      */
     private String fullShortUrl;
-
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.saas.admin.common.conversion.result.Result;
 import org.saas.admin.common.conversion.result.Results;
+import org.saas.admin.dto.req.RecycleBinRecoverReq;
 import org.saas.admin.dto.req.RecycleBinReqDTO;
 import org.saas.admin.remote.ShortLinkRemoteService;
 import org.saas.admin.remote.dto.req.ShortLinkRecycleBinPageReqDTO;
@@ -41,6 +42,15 @@ public class RecycleBinController {
     @GetMapping("/api/link/admin/v1/recycle-bin/page")
     public Result<IPage<ShortLinkPageRespDTO>> pageShortLink(ShortLinkRecycleBinPageReqDTO requestParam) {
         return recycleBinService.pageRecycleBinShortLink(requestParam);
+    }
+
+    /**
+     * 恢复短链接
+     */
+    @PostMapping("/api/link/admin/v1/recycle-bin/recover")
+    public Result<Void> recoverRecycleBin(@RequestBody RecycleBinRecoverReq requestParam){
+        shortLinkRemoteService.recoverRecycleBin(requestParam);
+        return Results.success();
     }
 
 }
