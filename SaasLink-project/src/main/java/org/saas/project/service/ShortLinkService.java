@@ -6,6 +6,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import org.saas.project.dao.entity.ShortLinkDO;
 import org.saas.project.dto.req.ShortLinkCreateReqDTO;
+import org.saas.project.dto.req.ShortLinkGroupStatsRecordDTO;
 import org.saas.project.dto.req.ShortLinkPageReqDTO;
 import org.saas.project.dto.req.ShortLinkUpdateReqDTO;
 import org.saas.project.dto.resp.ShortLinkCreateRespDTO;
@@ -49,4 +50,13 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      * @param response http回复报文
      */
     void restoreUrl(String shortUri, ServletRequest request, ServletResponse response);
+
+    /**
+     * 短链接监控统计
+     * @param fullShortUrl         短链接
+     * @param gid                  分组标识
+     * @param shortLinkStatsRecord 短链接统计实体
+     */
+
+    void shortLinkStats(String fullShortUrl, String gid, ShortLinkGroupStatsRecordDTO shortLinkStatsRecord);
 }

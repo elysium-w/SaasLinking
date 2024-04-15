@@ -23,9 +23,11 @@ import org.saas.project.common.conversion.exception.ServiceException;
 import org.saas.project.common.enums.VailDateTypeEnum;
 import org.saas.project.dao.entity.ShortLinkDO;
 import org.saas.project.dao.entity.ShortLinkGotoDO;
+import org.saas.project.dao.mapper.LinkAccessStatsMapper;
 import org.saas.project.dao.mapper.ShortLinkGotoMapper;
 import org.saas.project.dao.mapper.ShortLinkMapper;
 import org.saas.project.dto.req.ShortLinkCreateReqDTO;
+import org.saas.project.dto.req.ShortLinkGroupStatsRecordDTO;
 import org.saas.project.dto.req.ShortLinkPageReqDTO;
 import org.saas.project.dto.req.ShortLinkUpdateReqDTO;
 import org.saas.project.dto.resp.ShortLinkCreateRespDTO;
@@ -55,6 +57,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private final ShortLinkGotoMapper shortLinkGotoMapper;
     private final StringRedisTemplate stringRedisTemplate;
     private final RedissonClient redissonClient;
+    private final LinkAccessStatsMapper linkAccessStatsMapper;
     @Override
     public ShortLinkCreateRespDTO createLink(ShortLinkCreateReqDTO requestParam) {
         String shortLinkSuffix = generateSuffix(requestParam);
@@ -243,6 +246,11 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         }finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public void shortLinkStats(String fullShortUrl, String gid, ShortLinkGroupStatsRecordDTO shortLinkStatsRecord) {
+
     }
 
     public String generateSuffix(ShortLinkCreateReqDTO requestParam){
