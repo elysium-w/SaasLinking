@@ -1,12 +1,22 @@
 package org.saas.project.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.saas.project.common.database.BaseDO;
-
 import java.util.Date;
 
 /**
  * 短链接用户访问地点实体
  */
+@Data
+@TableName("t_link_locale_stats")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class LinkLocaleStatsDO extends BaseDO {
 
     /**
