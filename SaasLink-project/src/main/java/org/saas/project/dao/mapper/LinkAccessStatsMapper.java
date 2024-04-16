@@ -63,4 +63,20 @@ public interface LinkAccessStatsMapper extends BaseMapper<LinkAccessStatsDO> {
 //            "GROUP BY " +
 //            "    tl.gid, tlas.date;")
 //    List<LinkAccessStatsDO> listStatsByGroup(@Param("param")ShortLinkGroupStatsReqDTO requestParam);
+
+    @Select("SELECT " +
+            "    tlas.weekday, " +
+            "    SUM(tlas.pv) AS pv " +
+            "FROM " +
+            "    t_link tl INNER JOIN " +
+            "    t_link_access_stats tlas ON tl.full_short_url = tlas.full_short_url " +
+            "WHERE " +
+            "    tlas.full_short_url = #{param.fullShortUrl} " +
+            "    AND tl.gid = #{param.gid} " +
+            "    AND tl.del_flag = '0' " +
+            "    AND tl.enable_status = #{param.enableStatus} " +
+            "    AND tlas.date BETWEEN #{param.startDate} and #{param.endDate} " +
+            "GROUP BY " +
+            "    tlas.full_short_url, tl.gid, tlas.weekday;")
+    List<LinkAccessStatsDO> listWeekdayStatsBySHortLink(@Param("param")ShortLinkStatsReqDTO requestParam);
 }
